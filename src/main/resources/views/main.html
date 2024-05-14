@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="assets/icons/sun.png">
+   <link rel="stylesheet" href="css/main.css">
+    <title>Weather</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#648de5',
+                        dark_text: '#1e5b85'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="h-screen bg-primary">
+    <section id="shadowSidebar" class="fixed z-10 h-screen w-full bg-black opacity-65"></section>
+    <section id="sidebarDetail" class="fixed h-screen w-1/3 p-5 bg-white right-0 z-50 translate-x-[470px] transition-all ease-in-out duration-150">
+        <div class="bg-primary rounded-md p-3">
+            <div class="flex justify-between items-end">
+                <div class="flex flex-col w-1/4 justify-center items-center">
+                    <div class="w-8 h-8">
+                        <svg class="fill-white" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24"><path d="M18.928,23c-.128-.887-.422-1.721-.85-2.469l4.97-2.9-.504-.863-5.025,2.932c-.497-.637-1.102-1.186-1.788-1.619l2.987-5.134-.865-.502-3.004,5.163c-.727-.325-1.518-.53-2.35-.589v-6.018h-1v6.018c-.826,.059-1.614,.261-2.337,.583l-3.038-5.148-.861,.508,3.016,5.112c-.694,.437-1.307,.993-1.809,1.638l-5.03-2.922-.502,.865,4.975,2.89c-.425,.745-.716,1.574-.843,2.456H0v1H24v-1h-5.072Zm-12.844,0c.477-2.834,2.948-5,5.916-5s5.439,2.166,5.916,5H6.084ZM8.111,4.48l-.707-.707L10.606,.571c.769-.768,2.02-.77,2.787,0l3.202,3.202-.707,.707-3.202-3.202c-.057-.057-.12-.106-.187-.146v7.867h-1V1.133c-.066,.04-.129,.088-.187,.146l-3.203,3.202Z"/></svg>
+                    </div>
+                    <span class="text-white">04:35</span>
+                </div>
+                <div class="half-circle"></div>
+                <div class="flex flex-col w-1/4 justify-center items-center">
+                    <div class="w-8 h-8">
+                        <svg class="fill-white" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24"><path d="M18.928,23c-.128-.887-.422-1.721-.85-2.469l4.97-2.9-.504-.863-5.025,2.932c-.497-.637-1.102-1.186-1.787-1.619l2.987-5.133-.865-.503-3.004,5.163c-.727-.325-1.518-.53-2.35-.589v-6.018h-1v6.018c-.826,.059-1.614,.261-2.337,.583l-3.038-5.148-.861,.508,3.016,5.112c-.694,.437-1.307,.993-1.809,1.639l-5.03-2.921-.502,.864,4.975,2.889c-.424,.745-.716,1.574-.843,2.456H0v1H24v-1h-5.072Zm-12.844,0c.477-2.834,2.948-5,5.916-5s5.439,2.166,5.916,5H6.084Zm4.523-14.571l-3.203-3.203,.707-.707,3.203,3.203c.057,.057,.12,.106,.187,.146V0h1V7.868c.066-.04,.129-.088,.187-.146l3.202-3.203,.707,.707-3.202,3.203c-.384,.384-.889,.576-1.394,.576s-1.009-.192-1.394-.576Z"/></svg>
+                    </div>
+                    <span class="text-white">04:35</span>
+                </div>            
+            </div>
+            <hr>
+            <div class="flex justify-between mt-5">
+                <div class="flex flex-col items-center">
+                    <span class="font-medium text-white">29&deg;C</span>
+                    <span class="font-light text-sm text-[#153448]">Terasa</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="font-medium text-white">89 %</span>
+                    <span class="font-light text-sm text-[#153448]">Kelembapan</span>
+                </div>                
+                <div class="flex flex-col items-center">
+                    <span class="font-medium text-white">1011 mb</span>
+                    <span class="font-light text-sm text-[#153448]">Tekanan</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <header class="relative flex p-5">
+        <p class="text-white font-normal"><span id="nowDate" class="text-2xl"></span><br/><span id="realTime" class="font-bold text-5xl"></span></p>
+        <div class="absolute right-0 mr-5 w-10 h-10 p-2 rounded-full group hover:bg-white cursor-pointer transition-all ease-in-out duration-300" onclick="searchHandler()">
+            <svg class="fill-white group-hover:fill-primary" xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24"><path d="M23.707,22.293l-5.969-5.969a10.016,10.016,0,1,0-1.414,1.414l5.969,5.969a1,1,0,0,0,1.414-1.414ZM10,18a8,8,0,1,1,8-8A8.009,8.009,0,0,1,10,18Z"/></svg>
+        </div>
+    </header>
+    <main class="flex flex-col items-center justify-center fixed bottom-0 w-full">
+        <section id="mainWeatherView" class="flex justify-center gap-10">
+            <div class="w-24 flex items-center" id="mainIcon">
+                <div class="animate-pulse flex items-center justify-center w-full h-[96px] bg-gray-300 rounded">
+                    <svg class="w-10 h-10 text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                        <path d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z" />
+                    </svg>
+                </div>
+            </div>
+            <div class="flex flex-col justify-center gap-2">
+                <div id="weatherStatus">
+                    <p class="animate-pulse h-[36px] bg-gray-300 rounded-md w-36"></p>
+                </div>
+                <div id="currentTempContainer">
+                    <p class="animate-pulse h-[72px] bg-gray-200 rounded-md w-[224px]"></p>
+                </div>
+                <div id="cityName" class="flex flex-row gap-3">
+                    <p class="animate-pulse h-[32px] bg-gray-300 rounded-md w-36"></p>
+                </div>
+            </div>
+        </section>
+        <section class="flex gap-2 p-10 justify-center mt-10" id="forecastData"></section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="javascripts/jquery.min.js"></script>
+    <script src="javascripts/scripts.js"></script>
+</body>
+
+</html>

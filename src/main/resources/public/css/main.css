@@ -1,0 +1,7 @@
+.half-circle {
+    width: 50%; /* Lebar setengah lingkaran */
+    height: 100px; /* Tinggi setengah lingkaran */
+    border: 2px dashed white; /* Gaya garis putus-putus */
+    border-radius: 100px 100px 0 0; /* Membuat sudut melingkar hanya pada bagian atas */
+    border-bottom: none; /* Menghilangkan garis bawah */
+}
