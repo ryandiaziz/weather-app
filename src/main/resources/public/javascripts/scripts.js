@@ -75,6 +75,7 @@ function getCurrentWeather() {
         success: function (results) {
             TIMEZONE = results.timezone;
             setMainView(results.weather[0].main, results.main.temp, results.name);
+            setDetailView(results.main.feels_like, results.main.humidity, results.main.pressure, results.sys.sunrise, results.sys.sunset);
         },
     });
 }
@@ -128,6 +129,7 @@ function searchHandler() {
                 TIMEZONE = results.value.city.timezone;
                 setMainView(results.value.list[0].weather[0].main, results.value.list[0].main.temp, results.value.city.name);
                 setForecastView(results.value);
+                setDetailView(results.value.list[0].main.feels_like, results.value.list[0].main.humidity, results.value.list[0].main.pressure, results.value.city.sunrise, results.value.city.sunset);
                 Swal.close();
             }
         }
@@ -193,6 +195,14 @@ function setForecastLoadingView() {
     }
 
     $("#forecastData").html(str);
+}
+
+function setDetailView(feelLike, kelembapan, tekanan, sunrise, sunset){
+    $("#detailTerasaView").html(`${feelLike} &deg;C`);
+    $("#detailKelembapanView").html(`${kelembapan} %`);
+    $("#detailTekananView").html(tekanan);
+    $("#detailSunriseView").html(getSunTime(sunrise,TIMEZONE));
+    $("#detailSunsetView").html(getSunTime(sunset,TIMEZONE));
 }
 
 function setMainLoadingView() {
@@ -263,27 +273,8 @@ function getHour(hour) {
     return hour.substring(11, 16);
 }
 
-function startTime() {
-    const today = new Date();
-    let h = today.getHours();
-    let m = today.getMinutes();
-    let s = today.getSeconds();
-    m = checkTime(m);
-    s = checkTime(s);
-    document.getElementById('realTime').innerHTML = h + ":" + m + ":" + s;
-    setTimeout(startTime, 1000);
-}
-
-function checkTime(i) {
-    if (i < 10) { i = "0" + i };  // add zero in front of numbers < 10
-    return i;
-}
 
 function getSunTime(timestamp, timezone) {
-    // Convert timezone offset to minutes
-    let timezoneOffsetInMinutes = timezone / 60;
-
-    // Buat objek Date dari timestamp
     let date = new Date((timestamp + timezone) * 1000);
 
     // Konversi ke format waktu lokal yang dapat dibaca manusia
@@ -293,14 +284,12 @@ function getSunTime(timestamp, timezone) {
         month: '2-digit',
         day: '2-digit',
         hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
+        minute: '2-digit'
     };
 
     let readableDate = date.toLocaleString('en-US', options);
 
-    // Jika Anda ingin melihat hasil di konsol juga
-    console.log(readableDate + ' UTC+' + (timezoneOffsetInMinutes / 60));
+    return readableDate.substring(12,20);
 }
 
 function getDateNow() {
